@@ -57,6 +57,7 @@ sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/
 sudo cp arch/arm64/boot/dts/overlays/*.dtb* /boot/overlays/
 sudo cp arch/arm64/boot/dts/overlays/README /boot/overlays/
 
+for me i use another linux machine to build kernel in my network.so i could use scp to copy from my build machine to rpi3 target
 scp arch/arm64/boot/Image pi@192.168.1.127:/home/pi/test
 scp arch/arm64/boot/dts/broadcom/*.dtb pi@192.168.1.127:/home/pi/test
 scp arch/arm64/boot/dts/overlays/*.dtb* pi@192.168.1.127:/home/pi/test
@@ -66,5 +67,10 @@ scp arch/arm64/boot/dts/overlays/README pi@192.168.1.127:/home/pi/test
 step 8 :
 there is a config file witch is /boot/config.txt 
 you could specify kernel=kernel-myconfig.img to choose the right one for you.
+
+step 9 :
+please reference the default of the setting in /boot/cmdline.txt , please remove the quiet option,otherwise kernel does not print
+console=tty1 console=serial0,115200 root=PARTUUID=8a5a6965-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles
+
 
 

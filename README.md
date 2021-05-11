@@ -26,11 +26,11 @@ sudo apt install crossbuild-essential-arm64
 
 step 3 :
 at least we have to know how to cross compile kernel. here is some reference
-#For Pi 1, Pi Zero, Pi Zero W, or Compute Module:
-cd linux-raspberrypi-kernel_1.20210430-1
-KERNEL=kernel
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
+#For Pi 2, Pi 3, Pi 3+, or Compute Module 3:
 
+cd linux-raspberrypi-kernel_1.20210430-1
+KERNEL=kernel7
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
 #for 64-bit configs to Pi 3, Pi 3+ or Compute Module 3:
 cd linux-raspberrypi-kernel_1.20210430-1
 KERNEL=kernel8

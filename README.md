@@ -15,15 +15,23 @@ step 2 :
 setup a cross compiler enviroment,
 1) Install required dependencies and toolchain 
 sudo apt install git bc bison flex libssl-dev make libc6-dev libncurses5-dev
-2) Install the 64-bit toolchain for a 64-bit kernel
+2) 
+#32
+Install the 32-bit toolchain for a 32-bit kernel
+sudo apt install crossbuild-essential-armhf
+#64
+Install the 64-bit toolchain for a 64-bit kernel
 sudo apt install crossbuild-essential-arm64
 
 
 step 3 :
 at least we have to know how to cross compile kernel. here is some reference
-for 64-bit configs to Pi 3, Pi 3+ or Compute Module 3:
+#For Pi 1, Pi Zero, Pi Zero W, or Compute Module:
+cd linux-raspberrypi-kernel_1.20210430-1
+KERNEL=kernel
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
 
-#build configration file for board only
+#for 64-bit configs to Pi 3, Pi 3+ or Compute Module 3:
 cd linux-raspberrypi-kernel_1.20210430-1
 KERNEL=kernel8
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcmrpi3_defconfig
@@ -39,18 +47,31 @@ CONFIG_LOCALVERSION="-v7l-MY_CUSTOM_KERNEL"
 
 step 5 :
 #build with more configs
-For all 64-bit builds
-Note: Note the difference between Image target between 32 and 64-bit.
+#For all 32-bit builds
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 
+#For all 64-bit builds
+Note: Note the difference between Image target between 32 and 64-bit.
 make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
 
 
 step 6 :
 here is a example to install kernel module *ko etc
+#32
+sudo env PATH=$PATH make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/home/zylinux/Projects_min/raspberrypi3/software/kernel/test modules_install
+
+#64
 sudo env PATH=$PATH make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH=/home/zylinux/Projects_min/raspberrypi3/software/kernel/test modules_install
 
 
 step 7 :
+#32
+sudo cp mnt/fat32/$KERNEL.img /boot/$KERNEL-backup.img
+sudo cp arch/arm/boot/zImage /boot/$KERNEL.img
+sudo cp arch/arm/boot/dts/*.dtb /boot/
+sudo cp arch/arm/boot/dts/overlays/*.dtb* /boot/overlays/
+sudo cp arch/arm/boot/dts/overlays/README /boot/overlays/
+#64
 sudo cp /boot/$KERNEL.img /boot/$KERNEL-backup.img
 sudo cp arch/arm64/boot/Image /boot/$KERNEL.img
 sudo cp arch/arm64/boot/dts/broadcom/*.dtb /boot/
